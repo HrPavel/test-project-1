@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Email</title>
+</head>
+<body>
+Please enter your name and pick the Sectors you are currently involved in.
+<br>
+<br>
+<form action="#" th:action="@{/form}"  th:object="${formRequest}" method="post">
+    <div>
+        <label for="userName">Username</label>
+        <input type="text" th:field="*{userName}" id="userName">
+        <td th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}"></td>
+    </div>
+    <br>
+    <br>
+    <div>
+        Sectors:
+        <label>
+            <select th:field="*{categoryUuid}" multiple="" size="5" th:fragment="submenu" th:with="mycounter=${''}">
+                <ul>
+                    <li th:each="cat : ${categories} " >
+                        <option th:value="${cat.getUuid()}" th:text="${mycounter + cat.getName()}"></option>
+                        <div th:with="categories = ${cat.getChildCategories()}, mycounter = ${mycounter + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'}" th:include="form :: submenu"></div>
+                    </li>
+                </ul>
+            </select>
+        </label>
+        <td th:if="${#fields.hasErrors('categoryUuid')}" th:errors="*{categoryUuid}"></td>
+    </div>
+    <br>
+    <br>
+    <label for="agreeToTerms">Agree to terms</label>
+    <input type="checkbox" th:field="*{agreeToTerms}" id="agreeToTerms">
+    <br>
+    <br>
+    <button type="submit">
+        Submit
+    </button>
+</form>
+</body>
+</html>
